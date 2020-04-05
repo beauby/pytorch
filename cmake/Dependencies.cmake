@@ -953,6 +953,17 @@ if(USE_GLOO)
   endif()
 endif()
 
+if(USE_TENSORPIPE)
+  add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../third_party/tensorpipe)
+  # Here is a little bit hacky. We have to put PROJECT_BINARY_DIR in front
+  # of PROJECT_SOURCE_DIR with/without conda system. The reason is that
+  # gloo generates protobuf headers in the binary diretory.
+  include_directories(BEFORE SYSTEM ${CMAKE_CURRENT_LIST_DIR}/../third_party/tensorpipe)
+  include_directories(BEFORE SYSTEM ${PROJECT_BINARY_DIR}/third_party/tensorpipe)
+
+  list(APPEND Caffe2_DEPENDENCY_LIBS tensorpipe)
+endif()
+
 # ---[ profiling
 if(USE_PROF)
   find_package(htrace)
